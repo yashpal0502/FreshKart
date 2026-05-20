@@ -36,7 +36,7 @@ const App = () => {
 
         {/* Main pages */}
         <Route path="/" element={<AppLayout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Home />} /> //
           <Route path="products" element={<Products />} />
           <Route path="products/:id" element={<ProductPage />} />
           <Route path="search" element={<SearchResults />} />
@@ -50,6 +50,23 @@ const App = () => {
           </Route>
         </Route>
       </Routes>
+
+      {/*        
+      
+        | URL            | Component Rendered                         |
+        | -------------- | ------------------------------------------ |
+        | `/login`       | Login                                      |
+        | `/`            | AppLayout + Home                           |
+        | `/products`    | AppLayout + Products                       |
+        | `/products/10` | AppLayout + ProductPage                    |
+        | `/search`      | AppLayout + SearchResults                  |
+        | `/deals`       | AppLayout + FlashDeals                     |
+        | `/checkout`    | AppLayout + ProtectedRoute + Checkout      |
+        | `/orders`      | AppLayout + ProtectedRoute + MyOrders      |
+        | `/orders/5`    | AppLayout + ProtectedRoute + OrderTracking |
+        | `/addresses`   | AppLayout + ProtectedRoute + Addresses     |
+
+      */}
     </>
   );
 };
