@@ -10,6 +10,8 @@ import {
 import { SiFacebook, SiX, SiInstagram } from "@icons-pack/react-simple-icons";
 import hero_bg from "./hero_bg.jpeg";
 import delivery_truck from "./delivery_truck.svg";
+import logo from "./logo.svg";
+import loginphoto from "./loginphoto.png";
 import fruits_vegetables from "./fruits_vegetables.png";
 import dairy_eggs from "./dairy_eggs.png";
 import bakery from "./bakery.png";
@@ -24,6 +26,8 @@ import meat_seafood from "./meat_seafood.png";
 export const assets = {
   delivery_truck,
   hero_bg,
+  logo,
+  loginphoto,
 };
 
 export const categoriesData = [
