@@ -22,12 +22,16 @@ import frozen_foods from "./frozen_foods.png";
 import personal_care from "./personal_care.png";
 import baby_care from "./baby_care.png";
 import meat_seafood from "./meat_seafood.png";
+import heroslide from "./heroslide.png";
+import heroslide1 from "./heroslide1.png";
 
 export const assets = {
   delivery_truck,
   hero_bg,
   logo,
   loginphoto,
+  heroslide,
+  heroslide1,
 };
 
 export const categoriesData = [

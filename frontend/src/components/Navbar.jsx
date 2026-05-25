@@ -30,6 +30,20 @@ const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
+  const handleLogout = () => {
+    setUserMenuOpen(false);
+    navigate("/");
+  };
+
   return (
     <nav className="bg-white sticky top-0 z-50 border-b border-app-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 gap-4">
@@ -59,7 +73,10 @@ const Navbar = () => {
 
           {/* Search */}
 
-          <form className="hidden sm:flex flex-1 max-w-sm text-xs sm:text-sm">
+          <form
+            onSubmit={handleSearch}
+            className="hidden sm:flex flex-1 max-w-sm text-xs sm:text-sm"
+          >
             <div className="relative w-full">
               <SearchIcon className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-zinc-500" />
               <input
@@ -184,7 +201,10 @@ const Navbar = () => {
 
                       {user && (
                         <div className="border-t border-app-border pt-1">
-                          <button className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-color">
+                          <button
+                            onClick={handleLogout}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-color"
+                          >
                             <LogOutIcon size={16} /> Log Out
                           </button>
                         </div>
