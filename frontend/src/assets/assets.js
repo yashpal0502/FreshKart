@@ -37,7 +37,7 @@ export const assets = {
 export const categoriesData = [
   {
     slug: "fruits-vegetables",
-    name: "Fruits & Vegetables",
+    name: "Fruits & Vegies",
     image: fruits_vegetables,
   },
   { slug: "personal-care", name: "Personal Care", image: personal_care },

@@ -16,7 +16,7 @@ const Features = () => {
             {/* Top row */}
 
             <div className="flex items-center gap-5">
-              <div className="flex items-center justify-center size-10 rounded-2xl bg-emerald-600 text-white shadow-lg shadow-app-green/20">
+              <div className="flex items-center justify-center size-10 rounded-2xl bg-green-600 text-white shadow-lg shadow-app-green/20">
                 <feature.icon className="size-4" />
               </div>
 
