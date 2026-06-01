@@ -10,9 +10,12 @@ const HomeCategories = () => {
         {/* Header */}
         <div className="flex items-end justify-between mb-10">
           <div>
-            <span className="inline-flex items-center rounded-full bg-orange-100 text-orange-600 px-3 py-1 text-xs font-medium">
-              Explore
-            </span>
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-1 rounded-full bg-orange-500" />
+              <span className="text-sm font-medium text-orange-600">
+                Explore
+              </span>
+            </div>
 
             <h2 className="text-3xl md:text-4xl font-bold mt-3 text-zinc-900">
               Shop by Category
