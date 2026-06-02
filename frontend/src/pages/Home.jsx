@@ -3,6 +3,7 @@ import Hero from "../components/Home/Hero";
 import Features from "../components/Home/Features";
 import HomeCategories from "../components/Home/HomeCategories";
 import PopularProducts from "../components/Home/PopularProducts";
+import PromoBanner from "../components/Home/PromoBanner";
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <Features />
       <HomeCategories />
       <PopularProducts />
+      <PromoBanner />
     </div>
   );
 };
