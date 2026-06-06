@@ -1,12 +1,13 @@
 import { Heart, Plus, Star } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useCartContext } from "../context/CartContext";
 
 const ProductCard = ({ product }) => {
   const currency = import.meta.env.VITE_CURRENCY || "₹";
   const navigate = useNavigate();
 
-  const { addToCart } = { addToCart: () => {} };
+  const { addToCart } = useCartContext();
 
   return (
     <div
@@ -25,7 +26,10 @@ const ProductCard = ({ product }) => {
           onClick={(e) => e.stopPropagation()}
           className="absolute top-3 right-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm"
         >
-          <Heart size={16} className="text-zinc-500" />
+          <Heart
+            size={16}
+            className="text-zinc-500 hover:scale-110 hover:text-red-500 hover:fill-red-500"
+          />
         </button>
 
         <img
@@ -39,10 +43,7 @@ const ProductCard = ({ product }) => {
       <div className="p-4">
         {product.rating > 0 && (
           <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1">
-            <Star
-              size={12}
-              className="fill-green-600 text-green-600"
-            />
+            <Star size={12} className="fill-green-600 text-green-600" />
             <span className="text-xs font-medium text-green-700">
               {product.rating}
             </span>
@@ -56,9 +57,7 @@ const ProductCard = ({ product }) => {
           {product.name}
         </h3>
 
-        <p className="mt-1 text-xs text-zinc-500">
-          {product.unit}
-        </p>
+        <p className="mt-1 text-xs text-zinc-500">{product.unit}</p>
 
         {/* Price + Button */}
         <div className="mt-4 flex items-end justify-between">

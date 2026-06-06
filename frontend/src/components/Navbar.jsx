@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { useCartContext } from "../context/CartContext";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
@@ -22,10 +23,7 @@ const Navbar = () => {
     email: "yash@example.com",
     isAdmin: true,
   };
-  const { cartCount, setIsCartOpen } = {
-    cartCount: 5,
-    setIsCartOpen: () => {},
-  };
+  const { cartCount, setIsCartOpen } = useCartContext();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
