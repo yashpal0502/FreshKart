@@ -47,11 +47,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const cartCount = useMemo(() => {
-    items.reduce((sum, item) => sum + item.quantity, 0);
+    return items.reduce((sum, item) => sum + item.quantity, 0);
   }, [items]);
 
   const cartTotal = useMemo(() => {
-    items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    return items.reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0,
+    );
   }, [items]);
 
   // const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
