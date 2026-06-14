@@ -63,7 +63,7 @@ const FlashDeals = () => {
         )}
 
         {loading ? (
-          <Loading fullScreen={false} />
+          <Loading />
         ) : products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24">
             <div className="flex items-center justify-center w-24 h-24 rounded-full bg-orange-100">
