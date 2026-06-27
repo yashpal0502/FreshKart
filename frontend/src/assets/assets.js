@@ -37,7 +37,7 @@ export const assets = {
 export const categoriesData = [
   {
     slug: "fruits-vegetables",
-    name: "Fruits & Vegies",
+    name: "Fruits & Veggies",
     image: fruits_vegetables,
   },
   { slug: "personal-care", name: "Personal Care", image: personal_care },
@@ -822,16 +822,17 @@ export const dummyDashboardOrdersData = [
   {
     shippingAddress: {
       label: "Home",
-      address: "New Market Road ",
-      city: "New York ",
-      state: "NY",
-      zip: "876543",
-      lat: 40.7128,
-      lng: -74.006,
+      address: "H Block, Connaught Place",
+      city: "New Delhi",
+      state: "Delhi",
+      zip: "110001",
+      lat: 28.6315,
+      lng: 77.2167,
     },
+
     liveLocation: {
-      lat: 40.7128,
-      lng: -74.006,
+      lat: 28.6265,
+      lng: 77.22,
       updatedAt: "2026-04-06T08:41:27.211Z",
     },
     _id: "69d366617ed7e54198d67dac",
@@ -914,17 +915,18 @@ export const dummyDashboardOrdersData = [
   },
   {
     shippingAddress: {
-      label: "Home",
-      address: "New Market Road ",
-      city: "New York ",
-      state: "NY",
-      zip: "876543",
-      lat: 40.7128,
-      lng: -74.006,
+      label: "Office",
+      address: "Cyber Hub, DLF Phase 2",
+      city: "Gurugram",
+      state: "Haryana",
+      zip: "122002",
+      lat: 28.4959,
+      lng: 77.089,
     },
+
     liveLocation: {
-      lat: 40.7128,
-      lng: -74.006,
+      lat: 28.4925,
+      lng: 77.0935,
       updatedAt: "2026-04-06T08:41:27.211Z",
     },
     _id: "69d366617ed7e54198d67dad",
