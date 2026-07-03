@@ -149,11 +149,7 @@ const Checkout = () => {
           <div className="mt-6 md:mt-0 flex items-center gap-3 bg-white border border-app-border rounded-2xl px-5 py-3 shadow-sm">
             <ShieldCheck className="text-green-600 w-6 h-6" />
 
-            <div>
-              <p className="font-semibold text-sm">100% Secure Checkout</p>
-
-              <p className="text-xs text-zinc-500">SSL encrypted payment</p>
-            </div>
+            <p className="font-semibold text-sm">100% Secure Checkout</p>
           </div>
         </div>
 
