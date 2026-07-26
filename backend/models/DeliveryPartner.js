@@ -47,12 +47,12 @@ const deliveryPartnerSchema = mongoose.Schema(
   },
 );
 
-const DeliveryPartner = mongoose.model(
+const deliveryPartnerModel = mongoose.model(
   "DeliveryPartner",
   deliveryPartnerSchema,
 );
 
-export default DeliveryPartner;
+export default deliveryPartnerModel;
 
 // model DeliveryPartner {
 //   name        String

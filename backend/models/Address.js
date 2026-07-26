@@ -50,9 +50,9 @@ const addressSchema = mongoose.Schema(
   },
 );
 
-const Address = mongoose.model("Address", addressSchema);
+const addressModel = mongoose.model("Address", addressSchema);
 
-export default Address;
+export default addressModel;
 
 // model Address {
 //   userId    String
