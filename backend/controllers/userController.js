@@ -21,7 +21,7 @@ const getAdminStatus = (email) => {
 // user registration
 // POST :- /api/user/register
 
-export const register = async (req, res) => {
+export const registerUser = async (req, res) => {
   try {
     const { name, password } = req.body;
     const email = req.body.email.trim().toLowerCase();
@@ -40,12 +40,10 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "Please enter valid email" });
     }
     if (!validator.isStrongPassword(password)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Password must contain uppercase, lowercase, number and special character",
-        });
+      return res.status(400).json({
+        message:
+          "Password must contain uppercase, lowercase, number and special character",
+      });
     }
 
     //   Hashing user password
@@ -68,6 +66,49 @@ export const register = async (req, res) => {
     userData.isAdmin = getAdminStatus(userData.email);
 
     res.status(201).json({ user: userData, token });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+// user login
+// GET :-  /api/user/login
+
+export const loginUser = async (req, res) => {
+  try {
+    const { password } = req.body;
+    const email = req.body.email.trim().toLowerCase();
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please provide email and password" });
+    }
+
+    //   find user
+    const user = await userModel.findOne({ email }).populate("addresses");
+
+    if (!user) {
+      return res.status(401).json({ message: "User doesn't exist!" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = createToken(user._id);
+
+    const userData = user.toObject();
+    delete userData.password;
+
+    userData.isAdmin = getAdminStatus(userData.email);
+
+    res.status(201).json({
+      user: userData,
+      token,
+    });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
