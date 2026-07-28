@@ -1,4 +1,4 @@
-import userModel from "../models/User";
+import userModel from "../models/User.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -72,7 +72,7 @@ export const registerUser = async (req, res) => {
 };
 
 // user login
-// GET :-  /api/user/login
+// POST :-  /api/user/login
 
 export const loginUser = async (req, res) => {
   try {
