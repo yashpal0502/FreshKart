@@ -30,7 +30,7 @@ export default getFlashDeals = async (req, res) => {
     res.json({ products: productsWithDiscount });
   } catch (error) {
     console.error(error);
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -89,6 +89,45 @@ export const getProducts = async (req, res) => {
 
     res.json({
       products: productsWithDiscount,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// GET :- /api/products/:id
+
+export const getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await productModel.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found!",
+      });
+    }
+
+    const productObj = product.toObject();
+
+    const discount =
+      productObj.originalPrice && productObj.price
+        ? Math.round(
+            ((productObj.originalPrice - productObj.price) /
+              productObj.originalPrice) *
+              100,
+          )
+        : 0;
+
+    res.json({
+      product: {
+        ...productObj,
+        discount,
+      },
     });
   } catch (error) {
     console.error(error);
