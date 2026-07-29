@@ -136,3 +136,20 @@ export const getProduct = async (req, res) => {
     });
   }
 };
+
+// POST :- /api/products
+export const createProduct = async (req, res) => {
+  try {
+    const product = await productModel.create(req.body);
+
+    res.status(201).json({
+      product,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
