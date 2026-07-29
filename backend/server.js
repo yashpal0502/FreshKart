@@ -26,6 +26,12 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRouter);
 
+// error handling
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).json({ message: err.message });
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
