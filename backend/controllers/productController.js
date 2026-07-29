@@ -1,7 +1,6 @@
 import productModel from "../models/Product.js";
 
 // GET :- /api/products/flash-deals
-
 export default getFlashDeals = async (req, res) => {
   try {
     const products = await productModel
@@ -35,7 +34,6 @@ export default getFlashDeals = async (req, res) => {
 };
 
 // GET :- /api/products
-
 export const getProducts = async (req, res) => {
   try {
     const { category, search, minPrice, maxPrice, sort } = req.query;
@@ -99,7 +97,6 @@ export const getProducts = async (req, res) => {
 };
 
 // GET :- /api/products/:id
-
 export const getProduct = async (req, res) => {
   try {
     const { id } = req.params;
@@ -143,6 +140,34 @@ export const createProduct = async (req, res) => {
     const product = await productModel.create(req.body);
 
     res.status(201).json({
+      product,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// PUT :- /api/products/:id
+export const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await productModel.findByIdAndUpdate(id, req.body, {
+      new: true, // Return the updated document
+      runValidators: true, // Run schema validators
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found!",
+      });
+    }
+
+    res.json({
       product,
     });
   } catch (error) {
