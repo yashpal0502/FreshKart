@@ -1,5 +1,4 @@
-import { Admin } from "mongodb";
-import userModel from "../models/User";
+import userModel from "../models/User.js";
 
 const admin = async (req, res, next) => {
   try {
@@ -32,4 +31,4 @@ const admin = async (req, res, next) => {
   }
 };
 
-export default Admin;
+export default admin;

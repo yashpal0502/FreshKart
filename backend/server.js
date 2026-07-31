@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import connectDB from "./configs/mongodb.js";
 import userRouter from "./routes/userRoutes.js";
+import productRouter from "./routes/productRoutes.js";
 
 // Connecting mongoDb
 async function main() {
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 // api endpoints
 
 app.use("/api/user", userRouter);
+app.use("/api/products", productRouter);
 
 // error handling
 app.use((err, req, res, next) => {

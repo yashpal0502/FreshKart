@@ -1,7 +1,7 @@
 import productModel from "../models/Product.js";
 
 // GET :- /api/products/flash-deals
-export default getFlashDeals = async (req, res) => {
+export const getFlashDeals = async (req, res) => {
   try {
     const products = await productModel
       .find({
