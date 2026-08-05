@@ -5,6 +5,7 @@ import connectDB from "./configs/mongodb.js";
 import userRouter from "./routes/userRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
 
 // Connecting mongoDb
 async function main() {
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/upload", uploadRouter);
+app.use("/api/orders", orderRouter);
 
 // error handling
 app.use((err, req, res, next) => {
