@@ -173,3 +173,22 @@ export const getAllOrders = async (req, res) => {
 
   res.json({ orders });
 };
+
+// Get Order Location
+// GET:- /api/orders/:id/location
+
+export const getOrderLocation = async (req, res) => {
+  const order = await orderModel.findOne(
+    {
+      _id: req.params.id,
+      userId: req.user._id,
+    },
+    { liveLocation: 1, status: 1 },
+  );
+
+  if (!order) {
+    return res.status(404).json({ message: "Order not found!" });
+  }
+
+  res.json({ liveLocation: order.liveLocation, status: order.status });
+};
