@@ -161,3 +161,15 @@ export const updateOrderStatus = async (req, res) => {
   res.json({ order: updateOrder });
 };
 
+// Get all orders (admin)
+// GET:- /api/orders/all
+
+export const getAllOrders = async (req, res) => {
+  const orders = await orderModel
+    .find(filter)
+    .populate("user", "name email")
+    .populate("deliveryPartner", "name phone email")
+    .sort({ createdAt: -1 });
+
+  res.json({ orders });
+};
