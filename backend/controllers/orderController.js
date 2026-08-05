@@ -129,3 +129,35 @@ export const getOrder = async (req, res) => {
 
   res.json({ order });
 };
+
+// Update order status (admin)
+// PUT :- /api/orders/:id/status
+
+export const updateOrderStatus = async (req, res) => {
+  const { status, note } = req.body;
+
+  const order = await orderModel.findById(req.params.id);
+
+  if (!order) {
+    return res.status(404).json({ message: "Order not found!" });
+  }
+
+  const history = Array.isArray(order.statusHistory) ? order.statusHistory : [];
+  history.push({
+    status,
+    note: note || `Order ${status.toLowerCase()}`,
+    timestamp: new Date(),
+  });
+
+  const updateOrder = await orderModel.findByIdAndUpdate(
+    req.params.id,
+    {
+      status,
+      statusHistory: history,
+    },
+    { new: true },
+  );
+
+  res.json({ order: updateOrder });
+};
+
