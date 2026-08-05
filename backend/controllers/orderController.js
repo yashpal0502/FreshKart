@@ -111,3 +111,21 @@ export const getUserOrders = async (req, res) => {
 
   res.json({ orders });
 };
+
+// get single order
+// GET :- /api/orders/:id
+
+export const getOrder = async (req, res) => {
+  const order = await orderModel
+    .findOne({
+      _id: req.params.id,
+      userId: req.user._id,
+    })
+    .populate("deliveryPartner", "name phone avatar vehicleType");
+
+  if (!order) {
+    return res.status(404).json({ message: "Order not found!" });
+  }
+
+  res.json({ order });
+};
