@@ -4,7 +4,7 @@ import orderModel from "../models/Order.js";
 // Create order
 // POST :- /api/orders
 
-export default createOrder = async (req, res) => {
+export const createOrder = async (req, res) => {
   const { items, shippingAddress, paymentMethod } = req.body;
 
   if (!items || items.length === 0) {
@@ -87,4 +87,27 @@ export default createOrder = async (req, res) => {
       },
     });
   }
+};
+
+// Get user's orders
+// GET :- /api/orders
+
+export const getUserOrders = async (req, res) => {
+  const { status } = req.query;
+
+  const filter = {
+    userId: req.user._id,
+    $nor: [{ paymentMethod: "card", isPaid: false }],
+  };
+
+  if (status && status !== "all") {
+    filter.status = status;
+  }
+
+  const orders = await orderModel
+    .find(filter)
+    .populate("deliveryPartner", "name phone")
+    .sort({ createdAt: -1 });
+
+  res.json({ orders });
 };
