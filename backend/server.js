@@ -7,6 +7,10 @@ import productRouter from "./routes/productRoutes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 
+// inngest
+import { serve } from "inngest/express";
+import { inngest, functions } from "./inngest/index.js";
+
 // Connecting mongoDb
 async function main() {
   await connectDB();
@@ -31,6 +35,8 @@ app.use("/api/user", userRouter);
 app.use("/api/products", productRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/orders", orderRouter);
+// inngest endpoint
+app.use("/api/inngest", serve({ client: inngest, functions }));
 
 // error handling
 app.use((err, req, res, next) => {
