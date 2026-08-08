@@ -1,6 +1,8 @@
 import { cron, Inngest } from "inngest";
 import productModel from "../models/Product.js";
 import userModel from "../models/User.js";
+import orderModel from "../models/Order.js";
+import deliveryPartnerModel from "../models/DeliveryPartner.js";
 import sendEmail from "../configs/nodemailer.js";
 
 const LOW_STOCK_THRESHOLD = 10;
@@ -176,5 +178,100 @@ const sendMonthlyOffers = inngest.createFunction(
   },
 );
 
+// Auto-Assign Rider after 5 Minutes
+const autoAssignRider = inngest.createFunction(
+  {
+    id: `auto-assign-rider`,
+    name: "Auto Assign Delivery Rider",
+    triggers: [{ event: "order/placed" }],
+  },
+  async ({ event, step }) => {
+    const { orderId } = event.data;
+
+    // Wait for 5 minutes before attempting assignment
+    await step.sleep("wait-5-min", "5m");
+
+    const result = await step.run("assign-rider", async () => {
+      const order = await orderModel.findById(orderId);
+
+      // Order doesn't exist
+      if (!order) {
+        return { skipped: true, reason: "Order not found" };
+      }
+      // Already assigned
+      if (order.deliveryPartnerId) {
+        return { skipped: true, reason: "Already assigned" };
+      }
+      // Cancelled or delivered
+      if (["Cancelled", "Delivered"].includes(order.status)) {
+        return { skipped: true, reason: `Order is ${order.status}` };
+      }
+
+      // Find orders currently being delivered
+      const busyOrders = await orderModel
+        .find({
+          status: {
+            $in: ["Assigned", "Packed", "Out for Delivery"],
+          },
+          deliveryPartnerId: {
+            $ne: null,
+          },
+        })
+        .select("deliveryPartnerId")
+        .lean();
+
+      const busyRiderIds = busyOrders.map((o) => o.deliveryPartnerId);
+
+      const availableRider = await deliveryPartnerModel
+        .findOne({
+          isActive: true,
+          _id: {
+            $nin: busyRiderIds,
+          },
+        })
+        .lean();
+
+      if (!availableRider) {
+        return { skipped: true, reason: "No riders available" };
+      }
+
+      // Generate 6-digit OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      const history = Array.isArray(order.statusHistory)
+        ? order.statusHistory
+        : [];
+
+      history.push({
+        status: "Assigned",
+        note: `Auto-assigned to ${availableRider.name}`,
+        timestamp: new Date(),
+      });
+
+      await orderModel.findByIdAndUpdate(
+        orderId,
+        {
+          $set: {
+            deliveryPartnerId: availableRider._id,
+            deliveryOtp: otp,
+            status: "Assigned",
+            statusHistory: history,
+          },
+        },
+        { new: true },
+      );
+
+      return {
+        assigned: true,
+        riderId: availableRider.id,
+        riderName: availableRider.name,
+        orderId: orderId,
+      };
+    });
+
+    return result;
+  },
+);
+
 // Create an empty array where we'll export future Inngest functions
-export const functions = [checkLowStock];
+export const functions = [checkLowStock, sendMonthlyOffers, autoAssignRider];
