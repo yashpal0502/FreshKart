@@ -37,6 +37,10 @@ const deliveryPartnerSchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isAvailable: {
+      type: Boolean,
+      default: true,
+    },
     orders: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
@@ -62,6 +66,7 @@ export default deliveryPartnerModel;
 //   avatar      String?
 //   vehicleType String?
 //   isActive    Boolean?
+//   isAvailable Boolean?
 //   orders      Order[]
 //   createdAt   DateTime
 //   updatedAt   DateTime

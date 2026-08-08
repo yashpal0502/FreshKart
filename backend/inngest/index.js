@@ -222,14 +222,20 @@ const autoAssignRider = inngest.createFunction(
 
       const busyRiderIds = busyOrders.map((o) => o.deliveryPartnerId);
 
-      const availableRider = await deliveryPartnerModel
-        .findOne({
+      const availableRider = await deliveryPartnerModel.findOneAndUpdate(
+        {
           isActive: true,
-          _id: {
-            $nin: busyRiderIds,
+          isAvailable: true,
+        },
+        {
+          $set: {
+            isAvailable: false,
           },
-        })
-        .lean();
+        },
+        {
+          new: true,
+        },
+      );
 
       if (!availableRider) {
         return { skipped: true, reason: "No riders available" };
@@ -263,7 +269,7 @@ const autoAssignRider = inngest.createFunction(
 
       return {
         assigned: true,
-        riderId: availableRider.id,
+        riderId: availableRider._id.toString(),
         riderName: availableRider.name,
         orderId: orderId,
       };
