@@ -1,5 +1,6 @@
 import productModel from "../models/Product.js";
 import orderModel from "../models/Order.js";
+import { inngest } from "../inngest/index.js";
 
 // Create order
 // POST :- /api/orders
@@ -87,6 +88,16 @@ export const createOrder = async (req, res) => {
       },
     });
   }
+
+  // Send stock update events for each product in the order
+  for (const item of orderItems) {
+    await inngest.send({
+      name: "inventory/stock.updated",
+      data: { productId: item.product },
+    });
+  }
+
+  await inngest.send({ name: "order/placed", data: { orderId: order._id } });
 };
 
 // Get user's orders
