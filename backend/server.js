@@ -11,12 +11,6 @@ import orderRouter from "./routes/orderRoutes.js";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js";
 
-// Connecting mongoDb
-async function main() {
-  await connectDB();
-}
-main();
-
 const app = express();
 
 // MiddleWare
@@ -37,6 +31,22 @@ app.use("/api/upload", uploadRouter);
 app.use("/api/orders", orderRouter);
 // inngest endpoint
 app.use("/api/inngest", serve({ client: inngest, functions }));
+
+// Connecting mongoDb
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (error) {
+    console.error("Database connection failed:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
 
 // error handling
 app.use((err, req, res, next) => {
