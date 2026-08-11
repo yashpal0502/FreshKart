@@ -9,6 +9,7 @@ const connectDB = async () => {
     await mongoose.connect(`${process.env.MONGODB_URI}/FreshKart`);
   } catch (error) {
     console.log(error.message);
+    throw error;
   }
 };
 
