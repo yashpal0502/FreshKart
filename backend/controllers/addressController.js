@@ -1,4 +1,4 @@
-import addressModel from "../models/Address";
+import addressModel from "../models/Address.js";
 
 // Get user addresses
 // GET :- /api/addresses
