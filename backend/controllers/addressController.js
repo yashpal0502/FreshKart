@@ -135,3 +135,30 @@ export const updateAddress = async (req, res) => {
 
   res.json({ addresses });
 };
+
+// Delete address
+// DELETE :- /api/addresses/:id
+export const deleteAddress = async (req, res) => {
+  try {
+    const deletedAddress = await addressModel.findOneAndDelete({
+      _id: req.params._id,
+      userId: req.user._id,
+    });
+
+    if (!deleteAddress) {
+      return res.status(404).json({
+        message: "Address not found",
+      });
+    }
+    const addresses = await addressModel
+      .find({ userId: req.user._id })
+      .sort({ createdAt: 1 });
+
+    res.json({ addresses });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      message: "Failed to delete address",
+    });
+  }
+};
