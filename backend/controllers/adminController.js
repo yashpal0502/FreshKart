@@ -142,3 +142,58 @@ export const createDeliveryPartner = async (req, res) => {
     });
   }
 };
+
+// assign delivery partner for order
+export const assignDeliveryPartner = async (req, res) => {
+  const { partnerId } = req.body;
+
+  if (!partnerId) {
+    return res.status(400).json({
+      message: "Partner ID is required",
+    });
+  }
+
+  const order = await orderModel.findById(req.params._id);
+
+  if (!order) {
+    return res.status(404).json({
+      message: "Order not found",
+    });
+  }
+
+  const partner = await deliveryPartnerModel.findById(partnerId);
+
+  if (!partner) {
+    return res.status(404).json({
+      message: "Delivery partner not found",
+    });
+  }
+
+  const otp = String(Math.floor(100000 + Math.random() * 900000));
+
+  let status = order.status;
+
+  const history = Array.isArray(order.statusHistory)
+    ? [...order.statusHistory]
+    : [];
+
+  if (order.status === "Placed" || order.status === "Confirmed") {
+    status = "Assigned";
+    history.push({
+      status: "Assigned",
+      note: `Assigned to ${partner.name}`,
+      timestamp: new Date(),
+    });
+  }
+
+  const updatedOrder = await orderModel.findByIdAndUpdate(order._id, {
+    $set: {
+      deliveryPartnerId: partner._id,
+      deliveryOtp: otp,
+      status,
+      statusHistory: history,
+    },
+  });
+
+  res.json({ order: updatedOrder });
+};
