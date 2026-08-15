@@ -11,6 +11,7 @@ import addressRouter from "./routes/addressRoutes.js";
 // inngest
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js";
+import adminRouter from "./routes/adminRoutes.js";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use("/api/orders", orderRouter);
 // inngest endpoint
 app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/addresses", addressRouter);
+app.use("/api/admin", adminRouter);
 
 // Connecting mongoDb
 const startServer = async () => {

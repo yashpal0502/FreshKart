@@ -97,7 +97,7 @@ export const createDeliveryPartner = async (req, res) => {
 };
 
 // update delivery partner profile
-export const createDeliveryPartner = async (req, res) => {
+export const updateDeliveryPartner = async (req, res) => {
   const { name, phone, vehicleType, isActive } = req.body;
 
   const data = {};
