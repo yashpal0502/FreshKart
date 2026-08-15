@@ -49,3 +49,10 @@ export const getAdminStats = async (req, res) => {
     recentOrders,
   });
 };
+
+// get delivery partners list for admin
+export const getDeliveryPartners = async (req, res) => {
+  const partners = await deliveryPartnerModel.find().sort({ createdAt: -1 });
+
+  res.json({ partners });
+};
