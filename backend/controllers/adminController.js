@@ -95,3 +95,50 @@ export const createDeliveryPartner = async (req, res) => {
 
   res.status(201).json({ partner: partnerResponse });
 };
+
+// update delivery partner profile
+export const createDeliveryPartner = async (req, res) => {
+  const { name, phone, vehicleType, isActive } = req.body;
+
+  const data = {};
+
+  if (name !== undefined) {
+    data.name = name;
+  }
+
+  if (phone !== undefined) {
+    data.phone = phone;
+  }
+
+  if (vehicleType !== undefined) {
+    data.vehicleType = vehicleType;
+  }
+
+  if (isActive !== undefined) {
+    data.isActive = isActive;
+  }
+
+  try {
+    const partner = await deliveryPartnerModel.findOneAndUpdate(
+      { _id: req.params._id },
+      { $set: data },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!partner) {
+      return res.status(404).json({
+        message: "Partner not found",
+      });
+    }
+
+    res.json({ partner });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      message: "Failed to update delivery partner",
+    });
+  }
+};
