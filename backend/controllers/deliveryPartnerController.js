@@ -202,3 +202,44 @@ export const updateDeliveryStatus = async (req, res) => {
 
   res.json({ order });
 };
+
+// Update live location
+export const updateLocation = async (req, res) => {
+  const { lat, lng } = req.body;
+
+  if (lat === undefined || lng === undefined) {
+    return res.status(400).json({
+      message: "Latitude and longitude are required",
+    });
+  }
+
+  const order = await orderModel.findOne({
+    _id: req.params._id,
+    deliveryPartnerId: req.partner._id,
+    status: { $in: ["Assigned", "Packed", "Out for Delivery"] },
+  });
+
+  if (!order) {
+    return res.status(404).json({
+      message: "Delivery not found or location update not allowed",
+    });
+  }
+
+  await orderModel.findByIdAndUpdate(
+    order._id,
+    {
+      $set: {
+        liveLocation: {
+          lat: Number(lat),
+          lng: Number(lng),
+          updatedAt: new Date(),
+        },
+      },
+    },
+    { new: true },
+  );
+
+  res.json({
+    message: "Location updated successfully",
+  });
+};
