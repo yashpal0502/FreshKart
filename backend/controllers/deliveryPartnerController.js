@@ -120,3 +120,45 @@ export const completeDelivery = async (req, res) => {
 
   res.json({ order, message: "Delivery completed successfully" });
 };
+
+// Cancel delivery
+// PUT :- /api/delivery/my-deliveries/:id/cancel
+export const cancelDelivery = async (req, res) => {
+  const { reason } = req.body;
+
+  const order = await orderModel.findOne({
+    _id: req.params._id,
+    deliveryPartnerId: req.partner._id,
+  });
+
+  if (!order) {
+    return res.status(404).json({
+      message: "Delivery not found",
+    });
+  }
+
+  if (order.status === "Delivered") {
+    return res.status(400).json({ message: "Cannot cancel a delivered order" });
+  }
+
+  if (order.status === "Cancelled") {
+    return res.status(400).json({
+      message: "Delivery is already cancelled",
+    });
+  }
+
+  order.status = "Cancelled";
+
+  order.statusHistory.push({
+    status: "Cancelled",
+    note: reason || "",
+    timestamp: new Date(),
+  });
+
+  await order.save();
+
+  return res.json({
+    order,
+    message: "Delivery cancelled",
+  });
+};
