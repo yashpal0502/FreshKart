@@ -82,3 +82,41 @@ export const getDeliveryDetail = async (req, res) => {
 
   res.json({ order });
 };
+
+// Complete delivery with OTP
+// PUT :- /api/delivery/my-deliveries/:id/complete
+export const completeDelivery = async (req, res) => {
+  const { otp } = req.body;
+
+  if (!otp) {
+    return res.status(400).json({
+      message: "OTP is required",
+    });
+  }
+
+  const order = await orderModel.findOne({
+    _id: req.params._id,
+    deliveryPartnerId: req.partner._id,
+  });
+
+  if (!order || order.status === "Cancelled" || order.status === "Delivered") {
+    return res.status(400).json({ message: "Invalid Request" });
+  }
+
+  if (order.deliveryOtp !== otp) {
+    return res.status(401).json({ message: "Invalid OTP" });
+  }
+
+  order.status = "Delivered";
+  order.deliveryOtp = "";
+
+  order.statusHistory.push({
+    status: "Delivered",
+    note: "Delivered by partner",
+    timestamp: new Date(),
+  });
+
+  await order.save();
+
+  res.json({ order, message: "Delivery completed successfully" });
+};
