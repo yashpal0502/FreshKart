@@ -65,3 +65,20 @@ export const getMyDeliveries = async (req, res) => {
 
   res.json({ orders });
 };
+
+// Get single delivery details
+// GET :- /api/delivery/my-deliveries/:id
+export const getDeliveryDetail = async (req, res) => {
+  const order = await orderModel
+    .findOne({
+      _id: req.params._id,
+      deliveryPartnerId: req.partner._id,
+    })
+    .populate("user", "name email phone");
+
+  if (!order) {
+    return res.status(404).json({ message: "Delivery not found" });
+  }
+
+  res.json({ order });
+};
