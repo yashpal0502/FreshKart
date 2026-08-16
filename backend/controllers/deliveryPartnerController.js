@@ -162,3 +162,43 @@ export const cancelDelivery = async (req, res) => {
     message: "Delivery cancelled",
   });
 };
+
+// Update order status
+// PUT :- /api/delivery/my-deliveries/:id/status
+export const updateDeliveryStatus = async (req, res) => {
+  const { status } = req.body;
+  const allowedStatus = ["Packed", "Out for Delivery"];
+
+  if (!allowedStatus.includes(status)) {
+    return res.status(400).json({ message: "Invalid status update" });
+  }
+
+  const order = await orderModel.findOne({
+    _id: req.params._id,
+    deliveryPartnerId: req.partner._id,
+  });
+
+  if (!order) {
+    return res.status(404).json({
+      message: "Delivery not found",
+    });
+  }
+
+  if (["Delivered", "Cancelled"].includes(order.status)) {
+    return res.status(400).json({
+      message: `Cannot update a ${order.status.toLowerCase()} delivery`,
+    });
+  }
+
+  order.status = status;
+
+  order.statusHistory.push({
+    status,
+    note: `Status updated to ${status}`,
+    timestamp: new Date(),
+  });
+
+  await order.save();
+
+  res.json({ order });
+};
