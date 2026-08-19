@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 // generate jwt token
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  return jwt.sign({ _id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
 // check if user is admin

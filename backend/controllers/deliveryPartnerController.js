@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const generateToken = (id) => {
-  return jwt.sign({ id, role: "delivery" }, process.env.JWT_SECRET, {
+  return jwt.sign({ _id, role: "delivery" }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
@@ -240,6 +240,6 @@ export const updateLocation = async (req, res) => {
   );
 
   res.json({
-    message: "Location updated successfully",
+    success: true,
   });
 };
