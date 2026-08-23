@@ -57,6 +57,14 @@ export function AuthProvider({ children }) {
     navigate("/");
   };
 
+  const updateUser = (userData) => {
+    if (user) {
+      const updated = { ...user, ...userData };
+      setUser(updated);
+      localStorage.setItem("auth_user", JSON.stringify(updated));
+    }
+  };
+
   useEffect(() => {
     const savedToken = localStorage.getItem("auth_token");
     const savedUser = localStorage.getItem("auth_user");
