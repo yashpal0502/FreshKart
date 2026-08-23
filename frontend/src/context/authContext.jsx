@@ -48,6 +48,15 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_user");
+    toast.success("logout successful");
+    navigate("/");
+  };
+
   useEffect(() => {
     const savedToken = localStorage.getItem("auth_token");
     const savedUser = localStorage.getItem("auth_user");
