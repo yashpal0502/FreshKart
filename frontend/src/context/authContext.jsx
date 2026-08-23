@@ -77,7 +77,13 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  return <AuthContext.Provider>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{ user, token, loading, login, register, logout, updateUser }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
