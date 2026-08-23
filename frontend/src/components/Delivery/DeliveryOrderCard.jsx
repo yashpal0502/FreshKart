@@ -92,7 +92,7 @@ const DeliveryOrderCard = ({
           <MapPinIcon className="mt-0.5 size-4 text-app-green shrink-0" />
 
           <p className="text-xs leading-5 text-zinc-600">
-            {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
+            {order.shippingAddress.address}, {order.shippingAddress.city},
             {order.shippingAddress.state}
           </p>
         </div>
