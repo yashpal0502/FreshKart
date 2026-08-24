@@ -16,18 +16,16 @@ import {
   UserIcon,
   XIcon,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
-  const user = {
-    name: "yashpal",
-    email: "yash@example.com",
-    isAdmin: true,
-  };
   const { cartCount, setIsCartOpen } = useCartContext();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { user, logout } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -38,6 +36,7 @@ const Navbar = () => {
   };
 
   const handleLogout = () => {
+    logout();
     setUserMenuOpen(false);
     navigate("/");
   };
