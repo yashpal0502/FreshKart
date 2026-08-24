@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { Navigate, NavLink, Outlet } from "react-router-dom";
 import {
   PlusIcon,
   PackageSearchIcon,
@@ -9,8 +9,11 @@ import {
   Truck,
 } from "lucide-react";
 import Navbar from "../../components/Navbar";
+import { useAuth } from "../../context/AuthContext";
 
 export default function AdminLayout() {
+  const { user } = useAuth();
+
   const AdminLinkData = [
     { to: "/admin", label: "Dashboard", icon: BarChart3Icon },
     { to: "/admin/products/new", label: "Add Product", icon: PlusIcon },
@@ -19,6 +22,10 @@ export default function AdminLayout() {
     { to: "/admin/delivery-partners", label: "Delivery Partners", icon: Truck },
     { to: "/", label: "Exit", icon: LogOutIcon },
   ];
+
+  if (!user?.isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F8F7F2] via-[#FCFBF8] to-[#F2F6EF]">
