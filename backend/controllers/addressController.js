@@ -63,7 +63,7 @@ export const updateAddress = async (req, res) => {
 
   // Find address and make sure it belongs to the logged-in user
   const existingAddress = await addressModel.findOne({
-    _id: req.params._id,
+    _id: req.params.id,
     userId: req.user._id,
   });
 
@@ -118,7 +118,7 @@ export const updateAddress = async (req, res) => {
   try {
     await addressModel.updateOne(
       {
-        _id: req.params._id,
+        _id: req.params.id,
         userId: req.user._id,
       },
       {
@@ -141,11 +141,11 @@ export const updateAddress = async (req, res) => {
 export const deleteAddress = async (req, res) => {
   try {
     const deletedAddress = await addressModel.findOneAndDelete({
-      _id: req.params._id,
+      _id: req.params.id,
       userId: req.user._id,
     });
 
-    if (!deleteAddress) {
+    if (!deletedAddress) {
       return res.status(404).json({
         message: "Address not found",
       });
