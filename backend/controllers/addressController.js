@@ -13,7 +13,8 @@ export const getAddresses = async (req, res) => {
 // Add address
 // POST :- /api/addresses
 export const addAddress = async (req, res) => {
-  const { label, address, city, state, pin, isDefault, lat, lng } = req.body;
+  const { label, address, city, state, pincode, isDefault, lat, lng } =
+    req.body;
 
   //required coordinates
   if (lat == null || lng == null) {
@@ -43,7 +44,7 @@ export const addAddress = async (req, res) => {
     address,
     city,
     state,
-    pincode: pin,
+    pincode,
     isDefault: makeDefault,
     lat: Number(lat),
     lng: Number(lng),
@@ -59,7 +60,8 @@ export const addAddress = async (req, res) => {
 // Update address
 // PUT :- /api/addresses/:id
 export const updateAddress = async (req, res) => {
-  const { label, address, city, state, pin, isDefault, lat, lng } = req.body;
+  const { label, address, city, state, pincode, isDefault, lat, lng } =
+    req.body;
 
   // Find address and make sure it belongs to the logged-in user
   const existingAddress = await addressModel.findOne({
@@ -104,8 +106,8 @@ export const updateAddress = async (req, res) => {
   if (state) {
     data.state = state;
   }
-  if (pin) {
-    data.pin = pin;
+  if (pincode) {
+    data.pincode = pincode;
   }
   if (isDefault !== undefined) {
     data.isDefault = isDefault;
