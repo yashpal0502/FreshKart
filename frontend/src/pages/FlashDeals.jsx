@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { dummyProducts } from "../assets/assets";
 import { ZapIcon } from "lucide-react";
 import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
