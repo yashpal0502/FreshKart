@@ -1,7 +1,14 @@
 import React from "react";
 import { Home, MapPin, Building2, Map, X, Check } from "lucide-react";
 
-const AddressForm = ({ resetForm, handleSubmit, form, setForm, editingId }) => {
+const AddressForm = ({
+  resetForm,
+  handleSubmit,
+  form,
+  setForm,
+  editingId,
+  submitting,
+}) => {
   return (
     <>
       {/* Backdrop */}
@@ -165,11 +172,11 @@ const AddressForm = ({ resetForm, handleSubmit, form, setForm, editingId }) => {
 
               <input
                 type="number"
-                value={form.pin}
+                value={form.pincode}
                 onChange={(e) =>
                   setForm({
                     ...form,
-                    pin: e.target.value,
+                    pincode: e.target.value,
                   })
                 }
                 className="w-full rounded-2xl border border-gray-200 px-4 py-3 outline-none transition-all focus:border-app-green focus:ring-4 focus:ring-green-100"
@@ -220,6 +227,7 @@ const AddressForm = ({ resetForm, handleSubmit, form, setForm, editingId }) => {
           <div className="flex justify-end gap-3 border-t bg-white px-7 py-5">
             <button
               type="button"
+              disabled={submitting}
               onClick={resetForm}
               className="h-12 px-8 rounded-2xl border border-app-border bg-white text-app-text font-medium hover:bg-app-cream transition"
             >
@@ -228,9 +236,14 @@ const AddressForm = ({ resetForm, handleSubmit, form, setForm, editingId }) => {
 
             <button
               type="submit"
+              disabled={submitting}
               className="h-12 px-8 rounded-2xl bg-emerald-600 text-white font-semibold shadow-sm hover:bg-[#18884A] hover:shadow-md active:scale-[0.98] transition-all"
             >
-              {editingId ? "Update Address" : "Save Address"}
+              {submitting
+                ? "Saving..."
+                : editingId
+                  ? "Update Address"
+                  : "Save Address"}
             </button>
           </div>
         </form>

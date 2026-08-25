@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { data, Link, useNavigate, useParams } from "react-router-dom";
 import { useCartContext } from "../context/CartContext";
-import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
 import {

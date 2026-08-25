@@ -7,10 +7,28 @@ import {
   Briefcase,
 } from "lucide-react";
 import React from "react";
+import api from "../config/api";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 
-const AddressCard = ({ adds, onEditHandler }) => {
+const AddressCard = ({ adds, onEditHandler, setAddresses }) => {
+  const { updateUser } = useAuth();
+
   const handleDelete = async (id) => {
-    console.log(id);
+    try {
+      const confirm = window.confirm(
+        "Are you sure you want to delete this address?",
+      );
+      if (!confirm) {
+        return;
+      }
+      const { data } = await api.delete(`/addresses/${id}`);
+      setAddresses(data.addresses);
+      updateUser({ addresses: data.addresses });
+      toast.success("Address removed!");
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message || "Failed");
+    }
   };
 
   const getIcon = () => {
@@ -61,7 +79,7 @@ const AddressCard = ({ adds, onEditHandler }) => {
                 {adds.city}, {adds.state}
               </p>
 
-              <p className="text-sm text-gray-500">PIN : {adds.pin}</p>
+              <p className="text-sm text-gray-500">PIN : {adds.pincode}</p>
             </div>
           </div>
         </div>
