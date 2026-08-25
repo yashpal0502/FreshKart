@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { data, Link, useNavigate, useParams } from "react-router-dom";
 import { useCartContext } from "../context/CartContext";
 import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
@@ -15,6 +15,8 @@ import {
   StarIcon,
 } from "lucide-react";
 import DummyReviewsSection from "../assets/DummyReviewsSection";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY || "₹";
@@ -31,10 +33,21 @@ const ProductPage = () => {
     setLoading(true);
     setLocalQuantity(1);
     window.scrollTo(0, 0);
-    const product = dummyProducts.find((p) => p._id === id);
-    setProduct(product);
-    setRelatedProducts(dummyProducts.filter((p) => p._id !== id));
-    setLoading(false);
+
+    api
+      .get(`/products/${id}`)
+      .then(({ data }) => {
+        setProduct(data.product);
+        return api.get(`/products?category=${data.product.category}`);
+      })
+      .then(({ data }) => {
+        setRelatedProducts(data.products.filter((p) => p._id !== id));
+      })
+      .catch((err) => {
+        toast.error(err.response?.data?.error || err.message);
+        navigate("/products");
+      })
+      .finally(() => setLoading(false));
   }, [id, navigate]);
 
   if (loading) return <Loading />;
