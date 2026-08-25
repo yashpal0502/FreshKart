@@ -3,16 +3,21 @@ import { dummyProducts } from "../assets/assets";
 import { ZapIcon } from "lucide-react";
 import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const FlashDeals = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setProducts(dummyProducts.filter((p) => p.stock > 0));
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    api
+      .get("/products/flash-deals")
+      .then((res) => setProducts(res.data.products))
+      .catch((err) => {
+        toast.error(err.response?.data?.message || err?.message);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
