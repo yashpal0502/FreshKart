@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCartContext } from "../context/CartContext";
-import { dummyDashboardOrdersData, statusColors } from "../assets/assets";
 import Loading from "../components/Loading";
 import { CalendarIcon, ChevronRightIcon, PackageCheck } from "lucide-react";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const MyOrders = () => {
   const currency = import.meta.env.VITE_CURRENCY || "₹";
@@ -18,8 +19,18 @@ const MyOrders = () => {
   const { clearCart } = useCartContext();
 
   const fetchOrders = async () => {
-    setOrders(dummyDashboardOrdersData);
-    setLoading(false);
+    setLoading(true);
+
+    try {
+      const params = activeTab !== "all" ? `?status=${activeTab}` : "";
+      const { data } = await api.get(`/orders${params}`);
+      // console.log(data);
+      setOrders(data.orders);
+    } catch (error) {
+      toast.error(error.response?.data?.message || error?.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
