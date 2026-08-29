@@ -48,10 +48,14 @@ export const createOrder = async (req, res) => {
     };
   });
 
+  // console.log("ORDER ITEMS:", orderItems);
+
   const subTotal = orderItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0,
   );
+
+  // console.log("SUBTOTAL:", subTotal);
 
   const deliveryFee = subTotal > 249 ? 0 : 49;
   const tax = Math.round(subTotal * 0.08 * 100) / 100;
@@ -61,7 +65,7 @@ export const createOrder = async (req, res) => {
     userId: req.user._id,
     items: orderItems,
     shippingAddress,
-    subTotal,
+    subtotal: subTotal,
     deliveryFee,
     tax,
     total,
@@ -108,7 +112,7 @@ export const getUserOrders = async (req, res) => {
 
   const filter = {
     userId: req.user._id,
-    $nor: [{ paymentMethod: "card", isPaid: false }],
+    // $nor: [{ paymentMethod: "card", isPaid: false }],
   };
 
   if (status && status !== "all") {
@@ -117,7 +121,7 @@ export const getUserOrders = async (req, res) => {
 
   const orders = await orderModel
     .find(filter)
-    .populate("deliveryPartner", "name phone")
+    .populate("deliveryPartnerId", "name phone")
     .sort({ createdAt: -1 });
 
   res.json({ orders });
@@ -132,7 +136,7 @@ export const getOrder = async (req, res) => {
       _id: req.params.id,
       userId: req.user._id,
     })
-    .populate("deliveryPartner", "name phone avatar vehicleType");
+    .populate("deliveryPartnerId", "name phone avatar vehicleType");
 
   if (!order) {
     return res.status(404).json({ message: "Order not found!" });
@@ -177,9 +181,16 @@ export const updateOrderStatus = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   const orders = await orderModel
-    .find(filter)
+    .find({
+      $nor: [
+        {
+          paymentMethod: "card",
+          isPaid: false,
+        },
+      ],
+    })
     .populate("user", "name email")
-    .populate("deliveryPartner", "name phone email")
+    .populate("deliveryPartnerId", "name phone email")
     .sort({ createdAt: -1 });
 
   res.json({ orders });
