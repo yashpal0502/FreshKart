@@ -2,11 +2,11 @@ import userModel from "../models/User.js";
 
 const admin = async (req, res, next) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?._id;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const user = await userModel.findById({ userId });
+    const user = await userModel.findById(userId);
     if (!user) {
       return res.status(404).json({ message: "User not found!" });
     }
