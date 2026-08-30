@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { PlusIcon, EditIcon, XIcon } from "lucide-react";
+import { PlusIcon, EditIcon, XIcon, PackageIcon } from "lucide-react";
 import Loading from "../../components/Loading";
 import { dummyProducts } from "../../assets/assets";
 

@@ -7,7 +7,8 @@ import {
   AlertTriangleIcon,
 } from "lucide-react";
 import Loading from "../../components/Loading";
-import { dummyAdminDashboardData, statusColors } from "../../assets/assets";
+import { statusColors } from "../../assets/assets";
+import api from "../../config/api";
 
 export default function AdminDashboard() {
   const currency = import.meta.env.VITE_CURRENCY || "₹";
@@ -16,10 +17,14 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setStats(dummyAdminDashboardData);
-      setLoading(false);
-    }, 1000);
+    api
+      .get("/admin/stats")
+      .then((res) => setStats(res.data))
+      .catch((error) => {
+        console.log("Admin stats error:", error.response?.status);
+        console.log("Admin stats response:", error.response?.data);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const cards = stats

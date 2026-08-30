@@ -20,6 +20,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      // console.log("401 ERROR:", error.response?.data);
+
       localStorage.removeItem("auth_token");
       localStorage.removeItem("auth_user");
       // Only redirect if not already on auth pages
