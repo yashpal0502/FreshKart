@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { dummyDashboardOrdersData } from "../assets/assets";
 import Loading from "../components/Loading";
 import {
   ArrowLeftIcon,
@@ -30,6 +29,47 @@ const OrderTracking = () => {
       .finally(() => setLoading(false));
   }, [id, navigate]);
 
+  // live location every 10 seconds
+  useEffect(() => {
+    if (!order || ["Delivered", "Cancelled", "Placed"].includes(order.status)) {
+      return;
+    }
+
+    const fetchLocation = async () => {
+      try {
+        const { data } = await api.get(`/orders/${id}/location`);
+        if (
+          data.liveLocation?.lat !== null &&
+          data.liveLocation?.lng !== null &&
+          data.liveLocation.updatedAt
+        ) {
+          setLiveLocation({
+            lat: data.liveLocation.lat,
+            lng: data.liveLocation.lng,
+          });
+        }
+
+        // Also update order status if it changed
+        if (data.status && data.status !== order.status) {
+          setOrder((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  status: data.status,
+                }
+              : prev,
+          );
+        }
+      } catch (error) {
+        console.error("Failed to fetch live location:", error);
+      }
+    };
+
+    fetchLocation();
+    const interval = setInterval(fetchLocation, 20000);
+    return () => clearInterval(interval);
+  }, [id, order?.status]);
+
   if (loading) return <Loading />;
   if (!order) return null;
 
@@ -51,7 +91,7 @@ const OrderTracking = () => {
               Order #{order?._id.slice(-8).toUpperCase()}
             </h1>
             <p className="text-sm text-app-text-light mt-1">
-              Placed on{" "}
+              Placed on
               {new Date(order?.createdAt).toLocaleDateString("en-IN", {
                 month: "long",
                 day: "numeric",
