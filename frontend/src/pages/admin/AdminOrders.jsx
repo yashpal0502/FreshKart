@@ -6,6 +6,7 @@ import {
   dummyDashboardOrdersData,
   dummyDeliveryPartnerData,
 } from "../../assets/assets";
+import api from "../../config/api";
 
 export default function AdminOrders() {
   const currency = import.meta.env.VITE_CURRENCY || "₹";
@@ -17,13 +18,25 @@ export default function AdminOrders() {
   const [selectedPartner, setSelectedPartner] = useState("");
 
   const fetchOrders = async () => {
-    setOrders(dummyDashboardOrdersData);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/orders/all");
+      setOrders(data.orders);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to load orders");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchPartners = async () => {
-    setPartners(dummyDeliveryPartnerData);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/admin/delivery-partners");
+      setPartners(data.partners.filter((p) => p.isActive));
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Failed to fetch active partners",
+      );
+    }
   };
 
   useEffect(() => {
@@ -32,14 +45,30 @@ export default function AdminOrders() {
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
-    console.log(id, newStatus);
+    try {
+      await api.put(`/orders/${id}/status`, {
+        status: newStatus,
+      });
+      toast.success("Order status updated");
+      fetchOrders();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update status");
+    }
   };
 
   const handleAssign = async () => {
     if (!assignModal || !selectedPartner) return;
-    toast.success("Delivery partner assigned!");
-    setAssignModal(null);
-    setSelectedPartner("");
+    try {
+      await api.put(`/admin/orders/${assignModal}/assign`, {
+        partnerId: selectedPartner,
+      });
+      toast.success("Delivery partner assigned!");
+      setAssignModal(null);
+      setSelectedPartner("");
+      fetchOrders();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed");
+    }
   };
 
   const statusOptions = [
