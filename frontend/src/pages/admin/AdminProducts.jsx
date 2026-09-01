@@ -34,7 +34,14 @@ export default function AdminProducts() {
       )
     )
       return;
-    console.log(id);
+    try {
+      await api.delete(`/products/${id}`);
+      toast.success("Product marked as out of stock");
+      fetchProducts();
+    } catch (error) {
+      toast.error(error.response?.data?.message || error?.message);
+    }
+    // console.log(id);
   };
 
   if (loading) return <Loading />;
