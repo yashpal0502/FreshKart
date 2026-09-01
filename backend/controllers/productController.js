@@ -184,7 +184,11 @@ export const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const product = await productModel.findByIdAndDelete(id);
+    const product = await productModel.findByIdAndUpdate(
+      id,
+      { stock: 0 },
+      { new: true },
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -193,7 +197,7 @@ export const deleteProduct = async (req, res) => {
     }
 
     res.json({
-      message: "Product deleted successfully!",
+      message: "Product updated successfully!",
     });
   } catch (error) {
     console.error(error);

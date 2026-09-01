@@ -1,7 +1,7 @@
 import express, { urlencoded } from "express";
 import auth from "../middleware/auth.js";
 import multer from "multer";
-import connectCloudinary from "../configs/cloudinary.js";
+import cloudinary from "../configs/cloudinary.js";
 
 const uploadRouter = express.Router();
 
@@ -18,7 +18,7 @@ uploadRouter.post("/", auth, upload.single("image"), async (req, res) => {
 
     const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
 
-    const result = await connectCloudinary.uploader.upload(dataURI, {
+    const result = await cloudinary.uploader.upload(dataURI, {
       folder: "FreshKart",
       resource_type: "auto",
     });
