@@ -182,17 +182,16 @@ export const updateOrderStatus = async (req, res) => {
 export const getAllOrders = async (req, res) => {
   const orders = await orderModel
     .find({
-      $nor: [
-        {
-          paymentMethod: "card",
-          isPaid: false,
-        },
-      ],
+      // $nor: [
+      //   {
+      //     paymentMethod: "card",
+      //     isPaid: false,
+      //   },
+      // ],
     })
-    .populate("user", "name email")
+    .populate("userId", "name email")
     .populate("deliveryPartnerId", "name phone email")
     .sort({ createdAt: -1 });
-
   res.json({ orders });
 };
 

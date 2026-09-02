@@ -114,13 +114,11 @@ export const updateDeliveryPartner = async (req, res) => {
     data.vehicleType = vehicleType;
   }
 
-  if (isActive !== undefined) {
-    data.isActive = isActive;
-  }
+  data.isActive = isActive;
 
   try {
     const partner = await deliveryPartnerModel.findOneAndUpdate(
-      { _id: req.params._id },
+      { _id: req.params.id },
       { $set: data },
       {
         new: true,
@@ -153,7 +151,7 @@ export const assignDeliveryPartner = async (req, res) => {
     });
   }
 
-  const order = await orderModel.findById(req.params._id);
+  const order = await orderModel.findById(req.params.id);
 
   if (!order) {
     return res.status(404).json({
