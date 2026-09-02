@@ -16,6 +16,8 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     try {
       const { data } = await api.get("/orders/all");
+      // console.log(data.orders);
+
       setOrders(data.orders);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to load orders");
@@ -131,10 +133,10 @@ export default function AdminOrders() {
                     </td>
                     <td className="px-6 py-4">
                       <p className="font-medium text-zinc-900">
-                        {order.user?.name || "Unknown User"}
+                        {order.userId?.name || "Unknown User"}
                       </p>
                       <p className="text-xs text-zinc-500">
-                        {order.user?.email || "No email"}
+                        {order.userId?.email || "No email"}
                       </p>
                     </td>
                     <td className="px-6 py-4 font-medium">
@@ -142,19 +144,19 @@ export default function AdminOrders() {
                       {order.total.toFixed(2)}
                     </td>
                     <td className="px-6 py-4">
-                      {order.deliveryPartner ? (
+                      {order.deliveryPartnerId ? (
                         <div className="flex items-center gap-2">
                           <div className="size-6 rounded-full bg-app-green flex-center">
                             <span className="text-white text-[10px] font-semibold">
-                              {order.deliveryPartner.name?.charAt(0)}
+                              {order.deliveryPartnerId.name?.charAt(0)}
                             </span>
                           </div>
                           <div>
                             <p className="text-xs font-medium text-zinc-900">
-                              {order.deliveryPartner.name}
+                              {order.deliveryPartnerId.name}
                             </p>
                             <p className="text-[10px] text-zinc-500">
-                              {order.deliveryPartner.phone}
+                              {order.deliveryPartnerId.phone}
                             </p>
                           </div>
                         </div>
