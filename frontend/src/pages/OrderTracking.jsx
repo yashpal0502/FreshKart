@@ -29,7 +29,7 @@ const OrderTracking = () => {
       .finally(() => setLoading(false));
   }, [id, navigate]);
 
-  // live location every 10 seconds
+  // live location every 5 seconds
   useEffect(() => {
     if (!order || ["Delivered", "Cancelled", "Placed"].includes(order.status)) {
       return;
@@ -39,8 +39,8 @@ const OrderTracking = () => {
       try {
         const { data } = await api.get(`/orders/${id}/location`);
         if (
-          data.liveLocation?.lat !== null &&
-          data.liveLocation?.lng !== null &&
+          data.liveLocation?.lat != null &&
+          data.liveLocation?.lng != null &&
           data.liveLocation.updatedAt
         ) {
           setLiveLocation({
@@ -66,7 +66,7 @@ const OrderTracking = () => {
     };
 
     fetchLocation();
-    const interval = setInterval(fetchLocation, 20000);
+    const interval = setInterval(fetchLocation, 5000);
     return () => clearInterval(interval);
   }, [id, order?.status]);
 

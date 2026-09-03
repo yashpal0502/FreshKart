@@ -258,7 +258,8 @@ const Checkout = () => {
                 items={items}
                 handlePlaceOrder={handlePlaceOrder}
                 loading={loading}
-                total={cartTotal}
+                cartTotal={cartTotal}
+                total={total}
               />
             )}
           </div>

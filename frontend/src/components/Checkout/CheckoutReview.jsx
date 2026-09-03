@@ -12,9 +12,13 @@ export default function CheckoutReview({
   items,
   handlePlaceOrder,
   loading,
+  cartTotal,
   total,
 }) {
   const currency = import.meta.env.VITE_CURRENCY || "₹";
+  const deliveryFee = cartTotal > 249 ? 0 : 49;
+  // const tax = total * 0.08;
+  // var total = total + deliveryFee + tax;
 
   return (
     <div className="bg-white rounded-3xl border border-app-border shadow-sm overflow-hidden animate-fade-in">
@@ -125,13 +129,20 @@ export default function CheckoutReview({
               <span className="text-zinc-500">Subtotal</span>
               <span className="font-medium">
                 {currency}
-                {total.toFixed(2)}
+                {cartTotal.toFixed(2)}
               </span>
             </div>
 
             <div className="flex justify-between">
               <span className="text-zinc-500">Delivery Fee</span>
-              <span className="text-green-600 font-semibold">FREE</span>
+
+              <span className="text-green-600 font-semibold">
+                {deliveryFee === 0 ? (
+                  <span className="text-green-600 font-semibold">FREE</span>
+                ) : (
+                  `${currency}${deliveryFee.toFixed(2)}`
+                )}
+              </span>
             </div>
 
             <div className="flex justify-between">

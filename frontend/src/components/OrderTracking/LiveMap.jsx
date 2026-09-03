@@ -32,6 +32,9 @@ const LiveMap = ({ order, liveLocation }) => {
     }, [center, map]);
     return null;
   }
+
+  // console.log("Shipping Address:", order.shippingAddress);
+  // console.log("Live Location:", liveLocation);
   return (
     <>
       {order.status !== "Delivered" && order.status !== "Cancelled" && (
@@ -98,7 +101,7 @@ const LiveMap = ({ order, liveLocation }) => {
 
             {/* MAP */}
 
-            {liveLocation && liveLocation.lat !== 0 ? (
+            {liveLocation && liveLocation.lat != null ? (
               <MapContainer
                 center={[liveLocation.lat, liveLocation.lng]}
                 zoom={15}
