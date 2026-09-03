@@ -19,8 +19,8 @@ const DeliveryOrderCard = ({
   const currency = import.meta.env.VITE_CURRENCY || "₹";
 
   const user =
-    typeof order.user === "object"
-      ? order.user
+    typeof order.userId === "object"
+      ? order.userId
       : { name: "Customer", email: "", phone: "" };
   return (
     <div
